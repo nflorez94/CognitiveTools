@@ -1,0 +1,59 @@
+﻿@model AudioUploadViewModel
+@{
+    var textResult = string.Empty;
+    if (@Model != null && @Model.AudioText != null)
+    {
+        foreach (var line in @Model.AudioText)
+        {
+            textResult += line + System.Environment.NewLine;
+        }
+    }
+}
+
+<div class="container">
+    <form asp-action="UploadAudio" method="post" enctype="multipart/form-data" id="FormUpload">
+        <div class="form-group">
+            <div class="mb-3">
+                <label asp-for="AudioFile" class="form-label"></label>
+                <input asp-for="AudioFile" class="form-control" type="file" id="Files" name="AudioFile" placeholder="Upload your file...">
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="mb-3">
+                <label asp-for="AudioLanguaje"></label>
+                <select asp-for="AudioLanguaje" class="form-select" aria-label="Select the audio languaje">
+                    <option selected>Select your audio languaje</option>
+                    @foreach (var languaje in ViewBag.LanguajeList as Dictionary<string, string>)
+                    {
+                        <option value=@languaje.Value>@languaje.Key</option>
+
+                    }
+                </select>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Transcript!</button>
+    </form>
+
+    <label asp-for="AudioText"></label>
+    @if (!string.IsNullOrEmpty(textResult))
+    {
+        <div class="form-group">
+            <textarea id="editor" rows="@Model?.AudioText?.Count()" style="width:100%">
+                @for (int x = 0; x < @Model?.AudioText?.Count(); x++)
+                {
+                    @Model.AudioText.ToList()[x]
+
+                }
+                @*@textResult*@
+                                </textarea>
+        </div>
+    }
+    else
+    {
+        <div class="form-group">
+            <textarea id="editor" rows="10" style="width:100%"></textarea>
+        </div>
+    }
+
+
+</div>
